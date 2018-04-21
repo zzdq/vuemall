@@ -29,7 +29,7 @@
                                         <!--按钮组-->
                                         <div class="magnifier-line">
                                             <ul class="clearfix animation03">
-                                                <li v-for="item in goodsData.imglist">
+                                                <li v-for="(item,index) in goodsData.imglist" :key="index">
                                                     <div class="small-img">
                                                         <img :src="item.original_path" />
                                                     </div>
@@ -149,7 +149,7 @@
                             <div class="sidebar-box">
                                 <h4>推荐商品</h4>
                                 <ul class="side-img-list">
-                                    <li v-for="item in goodsData.hotgoodslist">
+                                    <li v-for="(item,index) in goodsData.hotgoodslist" :key="index">
                                         <div class="img-box">
                                             <router-link :to="'/site/goodsinfo/'+item.id" class="">
                                                 <img :src="item.img_url">
@@ -221,18 +221,18 @@
             Affix: Affix
         },
         beforeCreate(){
-            console.log("------beforeCreate---------")
+            // console.log("------beforeCreate---------")
         },
         created() {
-            console.log("------created---------")
+            // console.log("------created---------")
             //获取商品数据
             this.getGoodsData()
             //获取商品评论数据
             this.getCommentData()
         },
-        beforeMount(){
-            console.log("------beforeMount---------")
-        },
+        // beforeMount(){
+        //     console.log("------beforeMount---------")
+        // },
         mounted() {
             setTimeout(() => {
                 //1.0 给动画的起始位置赋值
@@ -243,18 +243,18 @@
                 this.shoppingCartCountOffset = $("#shoppingCartCount").offset()
             }, 500);
         },
-        beforeUpdate(){
-            console.log("------beforeUpdate---------")
-        },
-        updated(){
-            console.log("------updated---------")
-        },
-        beforeDestroy(){
-            console.log("------beforeDestroy---------")
-        },
-        destroyed(){
-            console.log("------destroyed---------")
-        },
+        // beforeUpdate(){
+        //     console.log("------beforeUpdate---------")
+        // },
+        // updated(){
+        //     console.log("------updated---------")
+        // },
+        // beforeDestroy(){
+        //     console.log("------beforeDestroy---------")
+        // },
+        // destroyed(){
+        //     console.log("------destroyed---------")
+        // },
         methods: {
             //1、根据id获取商品的数据
             getGoodsData() {

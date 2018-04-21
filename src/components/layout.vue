@@ -6,7 +6,7 @@
             <div class="head-top">
                 <div class="section">
                     <div class="left-box">
-                        <span>黑马买买买</span>
+                        <span>new买买买</span>
                         <a target="_blank" href="#"></a>
                         <a target="_blank" href="#"></a>
                     </div>
@@ -38,29 +38,34 @@
                     <div id="menu2" class="nav-box menuhd">
                         <ul>
                             <li class="index">
-                                <a href="#" class="">
+                                <router-link to="/site/home" class="">首页</router-link>
+                                <!-- <a href="#" class="">
                                     <span class="out" style="top: 0px;">首页</span>
-                                </a>
+                                </a> -->
                             </li>
                             <li class="news">
-                                <a href="#" class="">
+                                <router-link to="/site/selection" class="">每日精选</router-link>
+                                <!-- <a href="#" class="">
                                     <span class="out" style="top: 0px;">每日精选</span>
-                                </a>
+                                </a> -->
                             </li>
                             <li class="photo">
-                                <a href="#" class="">
+                                <router-link to="/site/seckill" class="">秒杀专区</router-link>
+                                <!-- <a href="#" class="">
                                     <span class="out" style="top: 0px;">秒杀专区</span>
-                                </a>
+                                </a> -->
                             </li>
                             <li class="video">
-                                <a href="#" class="">
-                                    <span class="out" style="top: 0px;">黑马超市</span>
-                                </a>
+                                <router-link to="/site/supermarket" class="">new超市</router-link>
+                                <!-- <a href="#" class="">
+                                    <span class="out" style="top: 0px;">new超市</span>
+                                </a> -->
                             </li>
                             <li class="down">
-                                <a href="#" class="">
+                                <router-link to="/site/vip1" class="">会员权益</router-link>
+                                <!-- <a href="#" class="">
                                     <span class="out" style="top: 0px;">会员权益</span>
-                                </a>
+                                </a> -->
                             </li>
                             <li class="goods">
                                 <router-link to="/site/goodslist" class="router-link-exact-active ">
@@ -104,7 +109,7 @@
                 </div>
                 <div class="foot-box">
                     <div class="copyright">
-                        <p>版权所有 黑马买买买 </p>
+                        <p>版权所有 new买买买 </p>
                         <p>公司地址： 联系电话：</p>
                         <p class="gray">Copyright © 2009-2018 itcast Corporation,All Rights Reserved.</p>
                     </div>

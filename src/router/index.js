@@ -24,6 +24,7 @@ axios.defaults.withCredentials = true
 // import myOrders from '../components/vip/myOrders'
 // import orderInfo from '../components/vip/orderInfo'
 
+// 实现按需加载
 const layout = () => import('../components/layout')
 const goodslist = () => import('../components/goods/goodslist')
 const goodsinfo = () => import('../components/goods/goodsinfo')
@@ -35,6 +36,11 @@ const pcPaySuccess = () => import('../components/pay/pcPaySuccess')
 const vipCenter = () => import('../components/vip/vipCenter')
 const myOrders = () => import('../components/vip/myOrders')
 const orderInfo = () => import('../components/vip/orderInfo')
+const home = () =>import('../components/home/home')
+const seckill = () =>import('../components/seckill/seckill')
+const selection = () =>import('../components/selection/selection')
+const supermarket = () =>import('../components/supermarket/supermarket')
+const vip1 = () =>import('../components/vip1/vip1')
 
 
 const router = new VueRouter({
@@ -44,6 +50,11 @@ const router = new VueRouter({
             {name:'goodslist',path:'goodslist',component:goodslist},
             {path:'goodsinfo/:goodsId',component:goodsinfo},
             {path:'shopcart',component:shopcart},
+            {path:'home',component:home},
+            {path:'seckill',component:seckill},
+            {path:'selection',component:selection},
+            {path:'supermarket',component:supermarket},
+            {path:'vip1',component:vip1},
             {name:'login',path:'login',component:login},
             //下面开始，需要进行登录验证
             {path:'order/:ids',component:order,meta:{needLogin:true}},
@@ -51,7 +62,8 @@ const router = new VueRouter({
             {path:'pcPaySuccess',component:pcPaySuccess,meta:{needLogin:true}},
             {path:'vipCenter',component:vipCenter,meta:{needLogin:true}},
             {path:'myOrders',component:myOrders,meta:{needLogin:true}},
-            {path:'orderInfo/:orderid',component:orderInfo,meta:{needLogin:true}}
+            {path:'orderInfo/:orderid',component:orderInfo,meta:{needLogin:true}},
+            {path:'vip1',component:vip1,meta:{needLogin:true}}
         ]}
     ]
 })
@@ -64,6 +76,7 @@ const router = new VueRouter({
  * next 调用next就会触发路由，调用它，就不会触发路由
  */
 router.beforeEach((to, from, next) => {
+    
     //记录要去的路径
     if(to.path!='/site/login'){
         localStorage.setItem('lastVisitPath',to.path)

@@ -183,192 +183,194 @@
             </div>
         </div>
     </div>
-    </div>
 </template>
 
 <style scoped>
+
 </style>
 
 <script>
-    import VDistpicker from 'v-distpicker'
+import VDistpicker from "v-distpicker";
 
-    import { getLocalGoods } from '../../common/localStorageTool'
+import { getLocalGoods } from "../../common/localStorageTool";
 
-    export default {
-        data() {
-            //自定义验证规则
-            var checkMobile = (rule, value, callback) => {
-                if (!value) {
-                    return callback(new Error('手机号码不能为空'));
-                } else {
-                    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+export default {
+  data() {
+    //自定义验证规则
+    var checkMobile = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号码不能为空"));
+      } else {
+        var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 
-                    if (!myreg.test(value)) {
-                        callback(new Error('手机号码不合法'));
-                    } else {//手机号码合法
-                        callback()
-                    }
-                }
-            }
-            return {
-                isSubmit:false,
-                orderGoodsList: [],//为了纯粹的展示商品信息，不需要提交给后台
-                //最终提交给后台的数据对象
-                order: {
-                    accept_name: '', //收获人姓名
-                    area: {
-                        "province": {
-                            "code": "440000",
-                            "value": "广东省"
-                        },
-                        "city": {
-                            "code": "440300",
-                            "value": "深圳市"
-                        },
-                        "area": {
-                            "code": "440306",
-                            "value": "宝安区"
-                        }
-                    },
-                    address: "中粮商务公园",//详细地址
-                    mobile: '13812345678',//手机号码
-                    email: 'abc@itcast.cn',//电子邮箱
-                    post_code: '518000',//邮编
-                    payment_id: '6',//在线支付
-                    express_id: '1',//快递方式 1：顺丰 2：圆通  3：韵达
-                    expressMoment: 20,//快递费用，默认是20元
-                    goodsAmount: 0,//商品的总价格，除开了快递费用的
-                    message: "请尽快发货",//留言
-                    goodsids:null,//购买商品的ids
-                    cargoodsobj:null//购买商品的详细信息
-                },
-                rules: {
-                    accept_name: [
-                        { required: true, message: '请输入收货人姓名', trigger: 'blur' }
-                    ],
-                    address: [
-                        { required: true, message: '请输入详细地址', trigger: 'blur' }
-                    ],
-                    mobile: [
-                        // { required: true, message: '请输入手机号码', trigger: 'blur' }
-                        { required: true, validator: checkMobile, trigger: 'blur' }
-                    ],
-                    area: [
-                        { required: true, message: '请选择所属地区', trigger: 'blur' }
-                    ]
-                }
-            }
-        },
-        components: { VDistpicker },
-        computed: {
-            //获取总数量
-            getTotalCount() {
-                let totalCount = 0
-                this.orderGoodsList.forEach(item => {
-                    totalCount += item.buycount
-                })
-
-                return totalCount
-            },
-            //获取商品的金额
-            getGoodsAmount() {
-                let goodsAmount = 0
-                this.orderGoodsList.forEach(item => {
-                    goodsAmount += item.sell_price * item.buycount
-                })
-
-                this.order.goodsAmount = goodsAmount
-
-                return goodsAmount
-            }
-        },
-        created() {
-            // this.order.accept_name = localStorage.getItem("accept_name")
-
-            this.getOrderGoodsListData()
-        },
-        beforeDestroy(){
-            // if(!this.isSubmit){
-            //     console.log("---------保存未提交----")
-            //     localStorage.setItem("accept_name",this.order.accept_name)
-            // }
-        },
-        methods: {
-            //获取下单时候的商品信息，展示给用户看
-            getOrderGoodsListData() {
-                const url = `site/validate/order/getgoodslist/${this.$route.params.ids}`
-
-                const localGoods = getLocalGoods()
-
-                this.$axios.get(url).then(response => {
-                    //给order的goodsids设置值
-                    this.order.goodsids = this.$route.params.ids
-
-                    //给order的cargoodsobj设置值
-                    this.order.cargoodsobj = {}
-
-                    response.data.message.forEach(item => {
-                        item.buycount = localGoods[item.id]
-
-                        //给this.order.cargoodsobj赋值
-                        this.order.cargoodsobj[item.id] = item.buycount
-                    });
-                    this.orderGoodsList = response.data.message
-                })
-            },
-            //当选中了省市区的区之后，会触发
-            selectedArea(data) {
-                //将选中的数据，赋值给模型
-                this.order.area = data
-            },
-            //更改快递方式触发的事件
-            expressChange(label) {
-                //更改快递的方式
-                this.order.express_id = label
-                switch (label) {
-                    case "1":
-                        //更改快递的费用
-                        this.order.expressMoment = 20
-                        break;
-
-                    case "2":
-                        this.order.expressMoment = 10
-                        break;
-
-                    case "3":
-                        this.order.expressMoment = 8
-                        break;
-
-                    default:
-                        break;
-                }
-            },
-            goToPay() {//下订单
-                this.$refs.orderForm.validate((valid) => {
-                    if (valid) {
-                       const url = "site/validate/order/setorder"
-
-                       this.$axios.post(url,this.order).then(response=>{
-                           if(response.data.status == 1){
-                               //失败
-                               this.$message.error(response.data.message)
-                               return
-                           }
-
-                           //1、清理localStorage中已经下过单的商品&&重新统计购物车徽标中的总数
-                           //87,92 ===> 
-                           const goodsids = this.$route.params.ids.split(',')
-                           this.$store.commit('deleteGoodsByIds',goodsids)
-
-                           //2、成功之后，通过编程式导航，跳转到支付组件中去，并且还要带上，订单id
-                           this.$router.push({path:`/site/payOrder/${response.data.message["orderid"]}`})
-                       })
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            }
+        if (!myreg.test(value)) {
+          callback(new Error("手机号码不合法"));
+        } else {
+          //手机号码合法
+          callback();
         }
+      }
+    };
+    return {
+      isSubmit: false,
+      orderGoodsList: [], //为了纯粹的展示商品信息，不需要提交给后台
+      //最终提交给后台的数据对象
+      order: {
+        accept_name: "", //收获人姓名
+        area: {
+          province: {
+            code: "440000",
+            value: "广东省"
+          },
+          city: {
+            code: "440300",
+            value: "深圳市"
+          },
+          area: {
+            code: "440306",
+            value: "宝安区"
+          }
+        },
+        address: "中粮商务公园", //详细地址
+        mobile: "13812345678", //手机号码
+        email: "abc@itcast.cn", //电子邮箱
+        post_code: "518000", //邮编
+        payment_id: "6", //在线支付
+        express_id: "1", //快递方式 1：顺丰 2：圆通  3：韵达
+        expressMoment: 20, //快递费用，默认是20元
+        goodsAmount: 0, //商品的总价格，除开了快递费用的
+        message: "请尽快发货", //留言
+        goodsids: null, //购买商品的ids
+        cargoodsobj: null //购买商品的详细信息
+      },
+      rules: {
+        accept_name: [
+          { required: true, message: "请输入收货人姓名", trigger: "blur" }
+        ],
+        address: [
+          { required: true, message: "请输入详细地址", trigger: "blur" }
+        ],
+        mobile: [
+          // { required: true, message: '请输入手机号码', trigger: 'blur' }
+          { required: true, validator: checkMobile, trigger: "blur" }
+        ],
+        area: [{ required: true, message: "请选择所属地区", trigger: "blur" }]
+      }
+    };
+  },
+  components: { VDistpicker },
+  computed: {
+    //获取总数量
+    getTotalCount() {
+      let totalCount = 0;
+      this.orderGoodsList.forEach(item => {
+        totalCount += item.buycount;
+      });
+
+      return totalCount;
+    },
+    //获取商品的金额
+    getGoodsAmount() {
+      let goodsAmount = 0;
+      this.orderGoodsList.forEach(item => {
+        goodsAmount += item.sell_price * item.buycount;
+      });
+
+      this.order.goodsAmount = goodsAmount;
+
+      return goodsAmount;
     }
+  },
+  created() {
+    // this.order.accept_name = localStorage.getItem("accept_name")
+
+    this.getOrderGoodsListData();
+  },
+  beforeDestroy() {
+    // if(!this.isSubmit){
+    //     console.log("---------保存未提交----")
+    //     localStorage.setItem("accept_name",this.order.accept_name)
+    // }
+  },
+  methods: {
+    //获取下单时候的商品信息，展示给用户看
+    getOrderGoodsListData() {
+      const url = `site/validate/order/getgoodslist/${this.$route.params.ids}`;
+
+      const localGoods = getLocalGoods();
+
+      this.$axios.get(url).then(response => {
+        //给order的goodsids设置值
+        this.order.goodsids = this.$route.params.ids;
+
+        //给order的cargoodsobj设置值
+        this.order.cargoodsobj = {};
+
+        response.data.message.forEach(item => {
+          item.buycount = localGoods[item.id];
+
+          //给this.order.cargoodsobj赋值
+          this.order.cargoodsobj[item.id] = item.buycount;
+        });
+        this.orderGoodsList = response.data.message;
+      });
+    },
+    //当选中了省市区的区之后，会触发
+    selectedArea(data) {
+      //将选中的数据，赋值给模型
+      this.order.area = data;
+    },
+    //更改快递方式触发的事件
+    expressChange(label) {
+      //更改快递的方式
+      this.order.express_id = label;
+      switch (label) {
+        case "1":
+          //更改快递的费用
+          this.order.expressMoment = 20;
+          break;
+
+        case "2":
+          this.order.expressMoment = 10;
+          break;
+
+        case "3":
+          this.order.expressMoment = 8;
+          break;
+
+        default:
+          break;
+      }
+    },
+    goToPay() {
+      //下订单
+      this.$refs.orderForm.validate(valid => {
+        if (valid) {
+          const url = "site/validate/order/setorder";
+
+          this.$axios.post(url, this.order).then(response => {
+            if (response.data.status == 1) {
+              //失败
+              this.$message.error(response.data.message);
+              return;
+            }
+
+            //1、清理localStorage中已经下过单的商品&&重新统计购物车徽标中的总数
+            //87,92 ===>
+            const goodsids = this.$route.params.ids.split(",");
+            this.$store.commit("deleteGoodsByIds", goodsids);
+
+            //2、成功之后，通过编程式导航，跳转到支付组件中去，并且还要带上，订单id
+            this.$router.push({
+              path: `/site/payOrder/${response.data.message["orderid"]}`
+            });
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    }
+  }
+};
 </script>
