@@ -20,7 +20,8 @@ import {
     Carousel,
     CarouselItem,
     Row,
-    Col 
+    Col,
+    Icon
 } from 'element-ui'
 
 Vue.use(Button)
@@ -36,6 +37,7 @@ Vue.use(Carousel)
 Vue.use(CarouselItem)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Icon)
 
 // 把方法添加到原型上
 Vue.prototype.$message = Message

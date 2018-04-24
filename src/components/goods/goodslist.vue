@@ -8,7 +8,7 @@
             </div>
         </div>
         <div class="section">
-            <div class="wrapper">
+            <div class="wrapper clearfix">
                 <div class="wrap-box">
                     <div class="left-220" style="margin: 0px;">
                         <div class="banner-nav">
@@ -41,7 +41,7 @@
                     <div class="left-705">
                         <div class="banner-img">
                             <div id="focus-box" class="focus-box">
-                                <el-carousel :interval="5000" arrow="always">
+                                <el-carousel :interval="2000" arrow="always">
                                     <el-carousel-item v-for="item in goodsData.sliderlist" :key="item.id">
                                         <img :src="item.img_url" alt="">
                                     </el-carousel-item>
@@ -49,7 +49,7 @@
                             </div>
                         </div>
                     </div>
-                    <!--/幻灯片-->
+                    <!-- 排行榜 -->
                     <div class="left-220">
                         <ul class="side-img-list">
                             <li v-for="(item,index) in goodsData.toplist" :key="item.id">
@@ -67,6 +67,7 @@
                 </div>
             </div>
         </div>
+        <!-- 商品列表标题 -->
         <div v-for="item in goodsgroupList" :key="item.level1cateid"  class="section">
             <div class="main-tit">
                 <h2>{{item.catetitle}}</h2>
@@ -78,6 +79,7 @@
                     </a>
                 </p>
             </div>
+            <!-- 商品列表 -->
             <div class="wrapper clearfix">
                 <div class="wrap-box">
                     <ul class="img-list">
@@ -107,15 +109,19 @@
     </div>
 </template>
 
-<style>
+<style scoped>
     .el-carousel__container{
-        height: 341px;
+        height: 314px;
     }
 
     .el-carousel__item img {
         width: 100%;
-        height: 100%;
+        height: 314px;
+        position: absolute;
+        top: 0;
+        left: 0;
     }
+
 </style>
 
 <script>
@@ -136,6 +142,7 @@
                 const url = "site/goods/gettopdata/goods"
 
                 this.$axios.get(url).then(response => {
+                    // console.log(response);
                     this.goodsData = response.data.message
                 })
             },

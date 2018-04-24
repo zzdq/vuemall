@@ -133,36 +133,38 @@
 </template>
 
 <script>
-    export default {
-        data(){
-            return {
-                myOrdersData:{},
-                pageIndex:1,//页码
-                pageSize:10,//页容量
-            }
-        },
-        created(){
-            this.getMyOrdersData()
-        },
-        methods:{
-            //获取订单的数据
-            getMyOrdersData(){
-                const url = `site/validate/order/userorderlist?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
-                this.$axios.get(url).then(response=>{
-                    this.myOrdersData = response.data
-                })
-            },
-            //和分页条相关的方法
-            handleSizeChange(pageSize){
-                this.pageSize = pageSize
-                this.pageIndex = 1
-                this.getMyOrdersData()
-            },
-            handleCurrentChange(pageIndex){
-                this.pageIndex = pageIndex
+export default {
+  data() {
+    return {
+      myOrdersData: {},
+      pageIndex: 1, //页码
+      pageSize: 10 //页容量
+    };
+  },
+  created() {
+    this.getMyOrdersData();
+  },
+  methods: {
+    //获取订单的数据
+    getMyOrdersData() {
+      const url = `site/validate/order/userorderlist?pageIndex=${
+        this.pageIndex
+      }&pageSize=${this.pageSize}`;
+      this.$axios.get(url).then(response => {
+        this.myOrdersData = response.data;
+      });
+    },
+    //和分页条相关的方法
+    handleSizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.pageIndex = 1;
+      this.getMyOrdersData();
+    },
+    handleCurrentChange(pageIndex) {
+      this.pageIndex = pageIndex;
 
-                this.getMyOrdersData()
-            }
-        }
+      this.getMyOrdersData();
     }
+  }
+};
 </script>

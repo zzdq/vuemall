@@ -359,6 +359,27 @@ line-height: 30px;border: 1px solid #34ad2a;}
 
 /*/商品详情页面 goodsinfo.vue*/
 
+/*/商品列表页面 goodslist.vue*/
+.el-carousel__arrow {
+    display: block;
+    height: 36px;
+    width: 36px;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: rgba(15, 21, 27, 0.5);
+    color: #fff;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-18px);
+    z-index: 10;
+    text-align: center;
+}
+
+.el-carousel__arrow--right {
+    right: 0;
+}
+
+
 /*购物车样式 car.vue*/
 
 .cart-info{ position:absolute; top:-50px; left:0; margin:0; padding:15px; border:1px solid #DFC795; width:302px; height:auto; background:#fcfbda; text-align:left; z-index:2; }

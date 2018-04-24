@@ -38,37 +38,34 @@
                     <div id="menu2" class="nav-box menuhd">
                         <ul>
                             <li class="index">
-                                <router-link to="/site/home" class="">首页</router-link>
-                                <!-- <a href="#" class="">
+                                <router-link to="/site/home" class=""> 
                                     <span class="out" style="top: 0px;">首页</span>
-                                </a> -->
+                                </router-link>
                             </li>
                             <li class="news">
-                                <router-link to="/site/selection" class="">每日精选</router-link>
-                                <!-- <a href="#" class="">
+                                <router-link to="/site/selection" class=""> 
                                     <span class="out" style="top: 0px;">每日精选</span>
-                                </a> -->
+                                </router-link>
+                                
                             </li>
                             <li class="photo">
-                                <router-link to="/site/seckill" class="">秒杀专区</router-link>
-                                <!-- <a href="#" class="">
+                                <router-link to="/site/seckill" class="">
                                     <span class="out" style="top: 0px;">秒杀专区</span>
-                                </a> -->
+                                </router-link>
+
                             </li>
                             <li class="video">
-                                <router-link to="/site/supermarket" class="">new超市</router-link>
-                                <!-- <a href="#" class="">
+                                <router-link to="/site/supermarket" class="">
                                     <span class="out" style="top: 0px;">new超市</span>
-                                </a> -->
+                                </router-link>
                             </li>
                             <li class="down">
-                                <router-link to="/site/vip1" class="">会员权益</router-link>
-                                <!-- <a href="#" class="">
+                                <router-link to="/site/vip1" class="">
                                     <span class="out" style="top: 0px;">会员权益</span>
-                                </a> -->
+                                </router-link>
                             </li>
                             <li class="goods">
-                                <router-link to="/site/goodslist" class="router-link-exact-active ">
+                                <router-link to="/site/goodslist" class="">
                                     <span class="out" style="top: 0px;">购物商城</span>
                                 </router-link>
                             </li>
@@ -125,28 +122,28 @@
 </template>
 
 <style scoped>
-    /** 导入hoverNav的样式---局部导入 */
-
-    @import "../statics/site/js/jqueryplugins/hoverNav/css/style.css";
+/** 导入hoverNav的样式---局部导入 */
+@import "../statics/site/js/jqueryplugins/hoverNav/css/style.css";
 </style>
 
 <script>
-    //局部导入
-    // import $ from 'jquery'
+//局部导入
+// import $ from 'jquery'
 
-    //导入公共的bus
-    import bus from '../common/common'
-    import { ISLOGIN } from '../common/common'
+//导入公共的bus
+import bus from "../common/common";
+import { ISLOGIN } from "../common/common";
 
-    //相当于es5的 module.exports = {}
-    export default {
-        data() {
-            return {
-                isLogin: false
-            }
-        },
-        created() {//代表组件已经创建出来了
-            /**
+//相当于es5的 module.exports = {}
+export default {
+  data() {
+    return {
+      isLogin: false
+    };
+  },
+  created() {
+    //代表组件已经创建出来了
+    /**
              改变处理函数中的this指向的方式1
             const _this = this
             bus.$on(ISLOGIN,function(logined){
@@ -154,76 +151,96 @@
                 _this.isLogin = logined
             })
             **/
-            //改变处理函数中的this指向的方式2
-            /**
+    //改变处理函数中的this指向的方式2
+    /**
             bus.$on(ISLOGIN,function(logined){
                 console.log("222====",logined)
                 this.isLogin = logined
             }.bind(this))
             **/
 
-            //调用检测是否登录成功的方法
-            this.isLogined()
+    //调用检测是否登录成功的方法
+    this.isLogined();
 
-            //改变处理函数中的this指向的方式3
-            bus.$on(ISLOGIN, (logined) => {
-                this.isLogin = logined
-            })
-        },
-        mounted() {//它会在我们dom元素加载完成之后执行
-            $("#menu2 li a").wrapInner('<span class="out"></span>');
-            $("#menu2 li a").each(function () {
-                $('<span class="over">' + $(this).text() + '</span>').appendTo(this);
-            });
+    //改变处理函数中的this指向的方式3
+    bus.$on(ISLOGIN, logined => {
+      this.isLogin = logined;
+    });
+  },
+  mounted() {
+    //它会在我们dom元素加载完成之后执行
+    $("#menu2 li a").wrapInner('<span class="out"></span>');
+    $("#menu2 li a").each(function() {
+      $('<span class="over">' + $(this).text() + "</span>").appendTo(this);
+    });
 
-            $("#menu2 li a").hover(function () {
-                $(".out", this).stop().animate({ 'top': '48px' }, 300); // move down - hide
-                $(".over", this).stop().animate({ 'top': '0px' }, 300); // move down - show
+    $("#menu2 li a").hover(
+      function() {
+        $(".out", this)
+          .stop()
+          .animate({ top: "48px" }, 300); // move down - hide
+        $(".over", this)
+          .stop()
+          .animate({ top: "0px" }, 300); // move down - show
+      },
+      function() {
+        $(".out", this)
+          .stop()
+          .animate({ top: "0px" }, 300); // move up - show
+        $(".over", this)
+          .stop()
+          .animate({ top: "-48px" }, 300); // move up - hide
+      }
+    );
+  },
+  methods: {
+    //登出
+    logout() {
+      this.$confirm("确认退出吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          const url = "site/account/logout";
 
-            }, function () {
-                $(".out", this).stop().animate({ 'top': '0px' }, 300); // move up - show
-                $(".over", this).stop().animate({ 'top': '-48px' }, 300); // move up - hide
-            });
-        },
-        methods: {
-            //登出
-            logout() {
-                this.$confirm('确认退出吗?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    const url = "site/account/logout"
-
-                    this.$axios.get(url).then(response => {
-                        if (response.data.status === 1) {
-                            this.$message.error(response.data.message)
-                            return
-                        }
-
-                        //重置我们的是否登录标识符
-                        this.isLogin = false
-
-                        //跳转到商品列表页面
-                        this.$router.push({ name: 'goodslist' })
-                    })
-                }).catch(() => {
-
-                });
-            },
-            //判断是否登录
-            isLogined(){
-                const url = "site/account/islogin"
-
-                this.$axios.get(url).then(response=>{
-                    console.log(response.data.code)
-                    if(response.data.code==='logined'){
-                        this.isLogin = true
-                    }else{
-                        this.isLogin = false
-                    }
-                })
+          this.$axios.get(url).then(response => {
+            if (response.data.status === 1) {
+              this.$message.error(response.data.message);
+              return;
             }
+
+            //重置我们的是否登录标识符
+            this.isLogin = false;
+
+            //跳转到商品列表页面
+            this.$router.push({ name: "goodslist" });
+          });
+        })
+        .catch(() => {});
+    },
+    //判断是否登录
+    isLogined() {
+      const url = "site/account/islogin";
+
+      this.$axios.get(url).then(response => {
+        console.log(response.data.code);
+        if (response.data.code === "logined") {
+          this.isLogin = true;
+        } else {
+          this.isLogin = false;
         }
+      });
     }
+  },
+    // 监听路由的变化，类名加在那个标签上
+  watch:{
+    '$route' (to, from) {
+      // 当路由不是商品详情页
+      if(to.path!=="/site/goodlist"){
+        // console.log("不是googdlist页");
+      }
+    }
+  }
+};
 </script>
